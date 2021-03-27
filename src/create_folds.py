@@ -11,7 +11,7 @@ import numpy as np
 pd.set_option("display.max_columns",40)
 #%%
 #os.getcwd()
-path = r'C:\Users\james\OneDrive\Desktop\Data Science\modelling\Churn prediction\Telco customer churn'
+path = r'Telco customer churn'
 os.chdir(path)
 #%%
 print(os.getcwd())
