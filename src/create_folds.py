@@ -14,11 +14,21 @@ pd.set_option("display.max_columns",40)
 path = r'Telco customer churn'
 os.chdir(path)
 #%%
-print(os.getcwd())
-#%%
 if __name__ == '__main__':
     dataframe_orig = pd.read_csv('data/Telco-Customer-Churn.csv')
+    data
+    
+    
+    print(dataframe_orig.head(5))
     print(dataframe_orig.shape)
+    
+    #%%
+    # will want to have an initial 
+    print(dataframe_orig.columns)
+    
+    
+    
+    
     #%% 
     print(dataframe_orig.isna().sum())
     #no missing data
