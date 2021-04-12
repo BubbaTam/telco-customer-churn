@@ -15,10 +15,6 @@ from sklearn import model_selection
 
 #local application/livrary specific imports
 #%%
-#os.getcwd()
-#path = r'Telco customer churn'
-#os.chdir(path)
-#%%
 if __name__ == '__main__':
     # importing the csv file 
     df = pd.read_csv('data/Telco-Customer-Churn-clean.csv')
