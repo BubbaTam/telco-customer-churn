@@ -20,6 +20,21 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib
 #%%
+features = {
+    'binary_features' : ['gender','senior_citizen','partner','dependents','phone_service',
+                   'paperless_billing'],
+    'nominal_features' : ['multiple_lines', 'internet_service','online_security',
+                    'online_backup','device_protection','tech_support',
+                    'streaming_tv','streaming_movies','contract',
+                    'payment_method'
+                    ],
+    'ordinal_features' : None,
+    'numerical_features' : ['tenure','monthly_charges','total_charges'],
+    'target_feature' : ['churn'],
+    'fold_feature' : ['k_fold']
+    }
+
+#%%
 models = {
     "decision_tree" : tree.DecisionTreeClassifier(),
     "rf" : ensemble.RandomForestClassifier(),
@@ -67,10 +82,3 @@ parameters = {
         'class_weight': ['balanced',None]}
                 }
 ordinal_feature_order = None
-#%%
-print(matplotlib.__version__)
-# {
-#         'solver':['newton-cg','lbfgs','liblinear'],
-#         'penalty':('l1', 'l2','elasticnet','none'),
-#         'C':[0.01,0.1,1.0,10,100]
-#         },
