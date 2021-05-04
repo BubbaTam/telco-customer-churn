@@ -21,7 +21,7 @@ from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import Normalizer
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.compose import ColumnTransformer
 #local application/library specific imports
 import src.utils as utils
@@ -42,11 +42,6 @@ def sorting_categorical_features(df,binary_features,
     print(ohe.categories)
     print(new_df)
     return new_df
-#%%
-df = pd.read_csv('data/telco-customer-churn-clean-folds.csv')
-#%%
-
-
 #%%
 def sorted_categorical_features_df(dataframe,
                                    binary_features = None,
@@ -116,10 +111,31 @@ def sorted_categorical_features_df(dataframe,
     
     return df_sorted_cf
 
-def standardise_numerical_features(df,numerical_features):
-    df[numerical_features] = StandardScaler().fit_transform(df[numerical_features])
-def normalise_numerical_features(df,numerical_features):
-    df[numerical_features] = Normalizer().fit_transform(df[numerical_features])
+def normalise_numerical_features(training_data,
+                                 testing_data,
+                                 numerical_features):
+    """
+    issue:
+        what about values outside the training data parameters 
+    input:
+        training data (to get the parameters, then later transform)
+        testing data (want to fit the parameters from the training data to)
+    """
+    scaler = MinMaxScaler().fit(training_data[dispatcher.features['numerical_features']])
+    training_data[dispatcher.features['numerical_features']] = scaler.transform(training_data[dispatcher.features['numerical_features']])
+    testing_data[dispatcher.features['numerical_features']] = scaler.transform(testing_data[dispatcher.features['numerical_features']])
+def standardise_numerical_features(training_data,
+                                   testing_data,
+                                   numerical_features):
+    """
+   
+    """
+    scaler = StandardScaler().fit(training_data[numerical_features])
+    training_data[numerical_features] = scaler.transform(training_data[numerical_features])
+    testing_data[numerical_features] = scaler.transform(testing_data[numerical_features])
+    
+   
+    
 def identify_input_features(binary_features,
                             ordinal_features,
                             numerical_features,
@@ -130,9 +146,44 @@ def identify_input_features(binary_features,
     Default is that target_feature and fold_feature are not included.
     The function identifies datatypes that are not present and excludes them  
     """
-    not_input_features = [target_feature,fold_feature]
-    [not_input_features.append(i) for i in dispatcher.features if dispatcher.features[i] == None]
-    input_features = [i for i in dispatcher.features if i not in not_input_features] 
+    # we know that we don't what these features 
+    not_input_features = ['target_feature','fold_feature']
+    # go through each datatype that has no correponding values associated with the key
+    [not_input_features.append(_) for _ in dispatcher.features if dispatcher.features[_] == None]
+    # loop through to find the input features 
+    input_features = [_ for _ in dispatcher.features if _ not in not_input_features] 
     return input_features
+def identify_non_input_features():
+     # we know that we don't what these features 
+    not_input_features = ['target_feature','fold_feature']
+    # go through each datatype that has no correponding values associated with the key
+    [not_input_features.append(_) for _ in dispatcher.features if dispatcher.features[_] == None]
+    for _ in not_input_features:
+        dataframe = dataframe.drop(_)
      
-   
+#%%
+# initial problem was that it did not make just one list but lists within the general list 
+# [['churn'],['k_fold'],ordinal_features]
+# want to go in each individual list
+not_input_features = ['target_feature','fold_feature']
+#[not_input_features.append(_) for _ in dispatcher.features['target_feature']]
+#[not_input_features.append(_) for _ in dispatcher.features['fold_feature']]
+[not_input_features.append(_) for _ in dispatcher.features if dispatcher.features[_] == None]
+# do we want the individual features or the dictionary key of features
+# I will go with dictionary values 
+input_features = [i for i in dispatcher.features if i not in not_input_features] 
+print(input_features)
+#%%
+# why == to deal with a dictionary feature have None as a value
+## this is all to avoid that feature dictionary feature 
+# 1) create list 
+# 2) sort out not input features 
+# 3) identify input features 
+# end goal: to concatenate based on input_features
+not_input_features = []
+not_input_features = [[_ for _ in dispatcher.features['target_feature']],[_ for _ in dispatcher.features['fold_feature']]]
+[not_input_features.append(i) for i in dispatcher.features if dispatcher.features[i] == None]
+input_features = [i for i in dispatcher.features if i not in not_input_features] 
+print(input_features)
+#%%
+print([dispatcher.features[_] for _ in input_features])
