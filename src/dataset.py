@@ -49,7 +49,7 @@ def sorted_categorical_features_df(dataframe,
                                    ordinal_features_order = 'auto',
                                    numerical_features = None,
                                    nominal_features = None,
-                                   drop_nominal_level = None,
+                                   drop_nominal_level = 'first',
                                    target_feature=None,
                                    fold_feature = None
                                    ):
@@ -92,9 +92,10 @@ def sorted_categorical_features_df(dataframe,
                    
     # Encode nominal input features 
     if nominal_features != None:
-        ohe = OneHotEncoder(drop=None,
+        ohe = OneHotEncoder(drop=drop_nominal_level,
                             sparse=False,
-                            dtype=int)
+                            dtype=int,
+                            )
         nominal = ohe.fit_transform(df_2[nominal_features])
         nominal_df = pd.DataFrame(data = nominal,
                                   columns = ohe.get_feature_names()
