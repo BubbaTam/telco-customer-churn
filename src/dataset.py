@@ -49,6 +49,7 @@ def sorted_categorical_features_df(dataframe,
                                    ordinal_features_order = 'auto',
                                    numerical_features = None,
                                    nominal_features = None,
+                                   drop_nominal_level = None,
                                    target_feature=None,
                                    fold_feature = None
                                    ):
@@ -185,5 +186,3 @@ not_input_features = [[_ for _ in dispatcher.features['target_feature']],[_ for 
 [not_input_features.append(i) for i in dispatcher.features if dispatcher.features[i] == None]
 input_features = [i for i in dispatcher.features if i not in not_input_features] 
 print(input_features)
-#%%
-print([dispatcher.features[_] for _ in input_features])
