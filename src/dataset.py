@@ -49,7 +49,7 @@ def sorted_categorical_features_df(dataframe,
                                    ordinal_features_order = 'auto',
                                    numerical_features = None,
                                    nominal_features = None,
-                                   drop_nominal_level = 'first',
+                                   drop_nominal_level = None,
                                    target_feature=None,
                                    fold_feature = None
                                    ):
@@ -112,29 +112,30 @@ def sorted_categorical_features_df(dataframe,
                               axis=1)
     
     return df_sorted_cf
+class Normalisation:
 
-def normalise_numerical_features(training_data,
-                                 testing_data,
-                                 numerical_features):
-    """
-    issue:
-        what about values outside the training data parameters 
-    input:
-        training data (to get the parameters, then later transform)
-        testing data (want to fit the parameters from the training data to)
-    """
-    scaler = MinMaxScaler().fit(training_data[dispatcher.features['numerical_features']])
-    training_data[dispatcher.features['numerical_features']] = scaler.transform(training_data[dispatcher.features['numerical_features']])
-    testing_data[dispatcher.features['numerical_features']] = scaler.transform(testing_data[dispatcher.features['numerical_features']])
-def standardise_numerical_features(training_data,
-                                   testing_data,
-                                   numerical_features):
-    """
-   
-    """
-    scaler = StandardScaler().fit(training_data[numerical_features])
-    training_data[numerical_features] = scaler.transform(training_data[numerical_features])
-    testing_data[numerical_features] = scaler.transform(testing_data[numerical_features])
+    def min_max_numerical_features_scaling(training_data,
+                                           testing_data,
+                                           numerical_features):
+        """
+        issue:
+            what about values outside the training data parameters 
+            input:
+                training data (to get the parameters, then later transform)
+                testing data (want to fit the parameters from the training data to)
+                """
+        scaler = MinMaxScaler().fit(training_data[dispatcher.features['numerical_features']])
+        training_data[dispatcher.features['numerical_features']] = scaler.transform(training_data[dispatcher.features['numerical_features']])
+        testing_data[dispatcher.features['numerical_features']] = scaler.transform(testing_data[dispatcher.features['numerical_features']])
+    def standardise_numerical_features(training_data,
+                                       testing_data,
+                                       numerical_features):
+        """
+        
+        """
+        scaler = StandardScaler().fit(training_data[numerical_features])
+        training_data[numerical_features] = scaler.transform(training_data[numerical_features])
+        testing_data[numerical_features] = scaler.transform(testing_data[numerical_features])
     
    
     
@@ -155,35 +156,3 @@ def identify_input_features(binary_features,
     # loop through to find the input features 
     input_features = [_ for _ in dispatcher.features if _ not in not_input_features] 
     return input_features
-def identify_non_input_features():
-     # we know that we don't what these features 
-    not_input_features = ['target_feature','fold_feature']
-    # go through each datatype that has no correponding values associated with the key
-    [not_input_features.append(_) for _ in dispatcher.features if dispatcher.features[_] == None]
-    for _ in not_input_features:
-        dataframe = dataframe.drop(_)
-     
-#%%
-# initial problem was that it did not make just one list but lists within the general list 
-# [['churn'],['k_fold'],ordinal_features]
-# want to go in each individual list
-not_input_features = ['target_feature','fold_feature']
-#[not_input_features.append(_) for _ in dispatcher.features['target_feature']]
-#[not_input_features.append(_) for _ in dispatcher.features['fold_feature']]
-[not_input_features.append(_) for _ in dispatcher.features if dispatcher.features[_] == None]
-# do we want the individual features or the dictionary key of features
-# I will go with dictionary values 
-input_features = [i for i in dispatcher.features if i not in not_input_features] 
-print(input_features)
-#%%
-# why == to deal with a dictionary feature have None as a value
-## this is all to avoid that feature dictionary feature 
-# 1) create list 
-# 2) sort out not input features 
-# 3) identify input features 
-# end goal: to concatenate based on input_features
-not_input_features = []
-not_input_features = [[_ for _ in dispatcher.features['target_feature']],[_ for _ in dispatcher.features['fold_feature']]]
-[not_input_features.append(i) for i in dispatcher.features if dispatcher.features[i] == None]
-input_features = [i for i in dispatcher.features if i not in not_input_features] 
-print(input_features)
