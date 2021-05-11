@@ -155,4 +155,4 @@ def identify_input_features(binary_features,
     [not_input_features.append(_) for _ in dispatcher.features if dispatcher.features[_] == None]
     # loop through to find the input features 
     input_features = [_ for _ in dispatcher.features if _ not in not_input_features] 
-    return input_features
+    return input_features    
