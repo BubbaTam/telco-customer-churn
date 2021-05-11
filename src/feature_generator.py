@@ -10,6 +10,8 @@ Question:
 -- no! then lets read 
 ---don't have feedback 
 """
+#%%
+
 from sklearn.feature_selection import VarianceThreshold
 
 
@@ -30,4 +32,9 @@ def numerical_feature_selection(dataframe,
     holder = VarianceThreshold(threshold=threshold * (1-threshold))
     dataframe[numerical_features] = holder.fit_transform(dataframe)
     
-def feature_selection(dataframe, )
+# def feature_selection(dataframe):
+
+#%%
+# binary_feature_selection(df,
+#                          binary_features = b_f,
+#                          threshold=)
