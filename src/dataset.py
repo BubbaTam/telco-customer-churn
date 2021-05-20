@@ -51,7 +51,8 @@ def sorted_categorical_features_df(dataframe,
                                    nominal_features = None,
                                    drop_nominal_level = None,
                                    target_feature=None,
-                                   fold_feature = None
+                                   fold_feature = None,
+                                   additional_features = None
                                    ):
     """
     prior:
@@ -62,6 +63,8 @@ def sorted_categorical_features_df(dataframe,
     options:
         - create a new dataframe with all featues 
         - to return the input and target feature/s separately 
+    not applicable with function:
+        text, date and time, images
     """
     
     df_2 = dataframe.copy()
@@ -100,15 +103,27 @@ def sorted_categorical_features_df(dataframe,
         nominal_df = pd.DataFrame(data = nominal,
                                   columns = ohe.get_feature_names()
                                   )
-    
-    df_sorted_cf = pd.concat([df_2[
+    if additional_features == None:
+        df_sorted_cf = pd.concat([df_2[
                                    binary_features+
                                    numerical_features
                                    ],
                               nominal_df,
                               df_2[
                                   target_feature+
-                                  fold_feature]],
+                                  fold_feature]
+                              ],
+                              axis=1)
+    if additional_features != None:
+        df_sorted_cf = pd.concat([df_2[
+                                   binary_features+
+                                   numerical_features
+                                   ],
+                              nominal_df,
+                              df_2[
+                                  target_feature+
+                                  fold_feature+
+                                  additional_features]],
                               axis=1)
     
     return df_sorted_cf
