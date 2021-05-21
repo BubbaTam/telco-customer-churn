@@ -26,22 +26,6 @@ from sklearn.compose import ColumnTransformer
 #local application/library specific imports
 import src.utils as utils
 import src.dispatcher as dispatcher
-
-#%%
-def sorting_categorical_features(df,binary_features,
-                                 nominal_features):
-    """
-    return a new dataframe with categorical variables encoded
-    """
-    new_df = df.copy()
-    # Encode the target feature
-    for column in binary_features:
-        new_df.loc[:,column] = LabelEncoder().fit_transform(new_df[column].values)
-    ohe = OneHotEncoder(categories='auto',drop=None,sparse=False,dtype=int)
-    ohe.fit_transform(new_df)
-    print(ohe.categories)
-    print(new_df)
-    return new_df
 #%%
 def sorted_categorical_features_df(dataframe,
                                    binary_features = None,
@@ -138,10 +122,11 @@ class Normalisation:
             input:
                 training data (to get the parameters, then later transform)
                 testing data (want to fit the parameters from the training data to)
-                """
-        scaler = MinMaxScaler().fit(training_data[dispatcher.features['numerical_features']])
-        training_data[dispatcher.features['numerical_features']] = scaler.transform(training_data[dispatcher.features['numerical_features']])
-        testing_data[dispatcher.features['numerical_features']] = scaler.transform(testing_data[dispatcher.features['numerical_features']])
+                """      
+        scaler = MinMaxScaler().fit(training_data[numerical_features])
+        training_data[numerical_features] = scaler.transform(training_data[numerical_features])
+        testing_data[numerical_features] = scaler.transform(testing_data[numerical_features])
+        
     def standardise_numerical_features(training_data,
                                        testing_data,
                                        numerical_features):
