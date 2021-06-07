@@ -36,9 +36,9 @@ features = {
 
 #%%
 models = {
-    "decision_tree" : tree.DecisionTreeClassifier(),
-    "rf" : ensemble.RandomForestClassifier(),
-    "logistic_regression" : linear_model.LogisticRegression(max_iter=400),
+    "decision_tree" : tree.DecisionTreeClassifier(criterion='entropy',max_depth=5,min_samples_split=100,min_samples_leaf=10),
+    "rf" : ensemble.RandomForestClassifier(n_estimators=300,max_depth=5,min_samples_split=100,min_samples_leaf=5),
+    "logistic_regression" : linear_model.LogisticRegression(max_iter=400,C=0.01),
     "XGBoost_classifier" : xgb.XGBClassifier(),
     "SVM": svm.SVC()
     }
@@ -46,14 +46,14 @@ models = {
 parameters = {
     'XGBoost_classifier' :
         {
-        'eta':[0.01,0.015,0.025,0.05,0.1],
-        'gamma':[0.05,0.1,0.3,0.5,0.7,0.9,1.0],
-        'max_depth':[3,5,7,9,12,15,17,25],
-        'min_child_weight': [1,3,5,7],
-        'subsample': [0.6,0.7,0.8,0.9,1.0],
-        'colsample_bytree': [0.6,0.7,0.8,0.9,1.0],
-        'lambda': [0.01,0.1,1.0],
-        'alpha': [0,0.1,0.5,1.0]
+        'eta':[0.01,0.015],
+        'gamma':[0.05,0.1],
+        'max_depth':[3,5],
+        'min_child_weight': [1,3],
+        'subsample': [0.6,0.7],
+        'colsample_bytree': [0.6,0.7],
+        'lambda': [0.01,0.1],
+        'alpha': [0,0.1,0]
         },
     'logistic_regression' :                    
         {
@@ -79,12 +79,8 @@ parameters = {
         },
     'SVM' :
         {
-        'kernel':['poly','rbf', 'sigmoid'],
-        'C':[0.001,0.01,0.1,1,10,100,1000],
-        'gamma':[0.0001,0.001,0.01,0.1,1]
+        'kernel':['poly','rbf','sigmoid'],
+        'C':[0.01,0.1,1,10,100,1000],
+        'gamma':[0.001,0.01,0.1,1]
         }
                 }
-ordinal_feature_order = None
-#%%
-print(tree.DecisionTreeClassifier().get_params().keys())
-#        'max features': ['auto','log2','sqrt']
